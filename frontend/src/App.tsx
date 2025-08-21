@@ -26,8 +26,11 @@ function App() {
   const [editDescription, setEditDescription] = useState('')
   const [editActive, setEditActive] = useState(true)
 
+  const API_BASE = import.meta.env.VITE_API_URL ?? ''
+  const api = (path: string) => (API_BASE ? `${API_BASE}${path}` : `/api${path}`)
+
   useEffect(() => {
-    fetch('/api/products')
+    fetch(api('/products'))
       .then((r) => r.json())
       .then((data: Product[]) => setProducts(data))
       .catch(() => setProducts([]))
@@ -47,7 +50,7 @@ function App() {
       active: newActive,
       price,
     }
-    const res = await fetch('/api/products', {
+    const res = await fetch(api('/products'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
@@ -86,7 +89,7 @@ function App() {
       active: editActive,
       price,
     }
-    const res = await fetch(`/api/products/${id}`, {
+    const res = await fetch(api(`/products/${id}`), {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
@@ -98,7 +101,7 @@ function App() {
   }
 
   async function deleteProduct(id: number) {
-    const res = await fetch(`/api/products/${id}`, { method: 'DELETE' })
+    const res = await fetch(api(`/products/${id}`), { method: 'DELETE' })
     if (!res.ok) return
     setProducts((prev) => prev.filter((p) => p.id !== id))
   }
