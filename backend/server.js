@@ -5,8 +5,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const HOST = '0.0.0.0';
 
-app.use(cors({ origin: '*' }));
-app.options('*', cors());
+app.use(cors());
 app.use(express.json());
 
 // In-memory storage
